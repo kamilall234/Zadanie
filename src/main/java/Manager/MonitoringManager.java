@@ -30,6 +30,9 @@ public class MonitoringManager {
     public MonitoringManager() {
         counterFileCreated = createTxtCounterFile();
         counterMovedFile = new ArrayList<Integer>();
+        for(int i=0;i<3;i++){
+            counterMovedFile.add(i,0);
+        }
         directory = new File("HOME");
         this.run();
     }
@@ -41,11 +44,13 @@ public class MonitoringManager {
             if(!currentFileList.isEmpty()){
                 for (File file:currentFileList
                 ) {
+                    int counter=0;
                     /*If file is xml, or else if is .jar*/
                     if(FilenameUtils.isExtension(file.getPath(),extensionFile[1])){
                         System.out.println(file.getPath());
                         try{
                             FileUtils.moveFileToDirectory(file, new File("DEV"),false);
+                            savingCounterValueToTxtFile(2);
                         }catch (IOException e){
                             e.printStackTrace();
                         }
@@ -58,6 +63,7 @@ public class MonitoringManager {
                             System.out.println(file.getPath());
                             try{
                                 FileUtils.moveFileToDirectory(file, new File("DEV"),false);
+                                savingCounterValueToTxtFile(0);
                             }catch (IOException e){
                                 e.printStackTrace();
                             }
@@ -65,6 +71,7 @@ public class MonitoringManager {
                             System.out.println(file.getPath());
                             try{
                                 FileUtils.moveFileToDirectory(file, new File("TEST"),false);
+                                savingCounterValueToTxtFile(1);
                             }catch (IOException e){
                                 e.printStackTrace();
                             }
@@ -105,13 +112,28 @@ public class MonitoringManager {
         }
     }
 
-    private void savingCounterValueToTxtFile(){
+    private void savingCounterValueToTxtFile(int typeOfDocument){
+        int counter=0;
+        if ((counterMovedFile.size()>typeOfDocument)){
+            counter = counterMovedFile.get(typeOfDocument);
+        }
+        counter++;
+        counterMovedFile.add(typeOfDocument,counter);
+    }
 
+    private void savingToFile(){
+
+        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path))){
+            bufferedWriter.write(content);
+            String valueContent = new String(counterMovedFile.toString());
+            bufferedWriter.write(valueContent);
+        }catch (IOException e){
+            e.printStackTrace();
+            System.out.println("Can't write to file counter");
+        }
     }
 
     private void readingFromTxtCounterOnStartup(){
 
     }
-
-
 }
