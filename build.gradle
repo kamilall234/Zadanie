@@ -6,11 +6,23 @@ group 'pl.kamilszwaj'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    /*testCompile group: 'junit', name: 'junit', version: '4.12'*/
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    /*TEST*/
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.2.0')
+    testCompile('org.junit.jupiter:junit-jupiter-params:5.2.0')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.0')
+    /*JODA TIME*/
+    implementation 'joda-time:joda-time:2.10.1'
 }
